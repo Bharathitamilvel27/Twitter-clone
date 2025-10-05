@@ -1,0 +1,10 @@
+[build]
+  base = "frontend"
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+# Ensure client-side routing works (React Router / Vite SPA)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
