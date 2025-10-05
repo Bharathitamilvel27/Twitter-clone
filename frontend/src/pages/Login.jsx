@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import twitterLogo from '../assets/twitter-logo.png';
-import './Login.css'; // this is our custom CSS
+import './Login.css'; // custom CSS
 
 function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -16,8 +16,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+      // Use VITE_API_URL environment variable instead of localhost
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${API_URL}/api/auth/login`, formData, { withCredentials: true });
+
+      // Save token in localStorage
       localStorage.setItem('token', res.data.token);
+
+      // Check if user is admin
       const isAdmin = !!res.data?.user?.isAdmin;
       navigate(isAdmin ? '/admin' : '/home');
     } catch (err) {
