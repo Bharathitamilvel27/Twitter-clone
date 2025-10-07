@@ -10,13 +10,16 @@ function Signup() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', formData);
+      // ✅ use environment variable for backend URL
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.post(`${API_URL}/api/auth/signup`, formData);
+
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
